@@ -1,0 +1,23 @@
+{
+    "name": "samizdam/fotostrana-ru-test",
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    },
+    "authors": [
+        {
+            "name": "samizdam",
+            "email": "samizdam@inbox.ru"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Samizdam\\Fotostrana\\": "src/Samizdam/Fotostrana/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Samizdam\\Fotostrana\\": "tests/Samizdam/Fotostrana/"
+        }
+    }
+}
