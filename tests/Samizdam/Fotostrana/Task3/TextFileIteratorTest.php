@@ -7,8 +7,9 @@ namespace Samizdam\Fotostrana\Task3;
  */
 class TextFileIteratorTest extends \PHPUnit_Framework_TestCase
 {
-
-    const SMALL_TEST_FILEPATH = __DIR__ . DIRECTORY_SEPARATOR . 'foo.txt';
+    const DS = DIRECTORY_SEPARATOR;
+    const SMALL_TEST_FILEPATH = __DIR__ . self::DS . 'files' . self::DS . 'foo.txt';
+    const BIG_TEST_FILEPATH = __DIR__ . self::DS . 'files' . self::DS . '2GB.txt';
 
     public function testZeroPositionOnOpenedFile()
     {
@@ -53,10 +54,23 @@ class TextFileIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($i, 11);
     }
 
-    public function testSeekOutOf___Exception()
+    public function testSeekOutOfRangeException()
     {
         $iterator = new TextFileCharIterator(self::SMALL_TEST_FILEPATH);
         $this->expectException(\OutOfRangeException::class);
         $iterator->seek(100500);
+    }
+
+    public function testSeekIn2GBFile()
+    {
+        if(!file_exists(self::BIG_TEST_FILEPATH)) {
+            $this->markTestSkipped('2GB.txt for this test not exists. You can create it with generate-2GB-file.sh ');
+        }
+        $iterator = new TextFileCharIterator(self::BIG_TEST_FILEPATH);
+        $twoGB = 1024 * 1024 * 1024 * 2;
+        $iterator->seek($twoGB - 1);
+        $this->assertTrue($iterator->valid());
+        $this->expectException(\OutOfRangeException::class);
+        $iterator->seek($twoGB);
     }
 }
